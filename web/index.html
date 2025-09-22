@@ -2,80 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>DM Shared Panel</title>
+  <title>DM Shared Panel - VS Code Style</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app" class="hidden">
-    <!-- VS Code-like title bar -->
+    <!-- Enhanced VS Code title bar -->
     <div class="vscode-titlebar">
       <div class="traffic">
         <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
       </div>
-      <div class="title" id="windowTitle">DM Shared Panel — JSON Editor</div>
+      <div class="title" id="windowTitle">DM Shared Panel — Advanced Code Editor</div>
       <div class="title-actions">
-        <button id="refreshBtn" class="ghost">Refresh</button>
-        <button id="closeBtn" class="ghost">Close</button>
+        <button id="refreshBtn" class="ghost">🔄 Refresh</button>
+        <button id="closeBtn" class="ghost">✕ Close</button>
       </div>
     </div>
 
-    <!-- VS Code-like tabs -->
+    <!-- Enhanced VS Code tabs -->
     <div class="vscode-tabs">
-      <button class="tab active" data-tab="items">items.json</button>
-      <button class="tab" data-tab="jobs">jobs.json</button>
-      <button class="tab" data-tab="gangs">gangs.json</button>
-      <button class="tab" data-tab="vehicles">vehicles.json</button>
-      <button class="tab" data-tab="weapons">weapons.json</button>
+      <button class="tab active" data-tab="items">📦 items.json</button>
+      <button class="tab" data-tab="jobs">💼 jobs.json</button>
+      <button class="tab" data-tab="gangs">👥 gangs.json</button>
+      <button class="tab" data-tab="vehicles">🚗 vehicles.json</button>
+      <button class="tab" data-tab="weapons">🔫 weapons.json</button>
     </div>
 
     <div class="workbench">
-      <!-- Explorer sidebar -->
+      <!-- Enhanced Explorer sidebar -->
       <div class="explorer">
-        <div class="explorer-title">EXPLORER</div>
-        <input id="search" placeholder="Search key..." class="search">
+        <div class="explorer-title">File Explorer</div>
+        <input id="search" placeholder="🔍 Search entries..." class="search">
         <ul id="list"></ul>
       </div>
 
-      <!-- Editor group -->
+      <!-- Enhanced Editor group -->
       <div class="editor-group">
         <div class="editor-toolbar">
-        <div class="file-name">
-          <span id="fileEntity">items</span>/<span id="fileKey">new_key</span><span id="fileExt">.json</span>
+          <div class="file-name">
+            <span id="fileEntity">items</span>/<span id="fileKey">new_key</span><span id="fileExt">.json</span>
+          </div>
+          <div class="toolbar-actions">
+            <label class="fmt-label">Format:</label>
+            <select id="fmtSelect">
+              <option value="json" selected>JSON</option>
+              <option value="lua">Lua</option>
+            </select>
+            <button id="addBtn">➕ Add</button>
+            <button id="updateBtn">💾 Update</button>
+            <button id="removeBtn" class="danger">🗑️ Remove</button>
+          </div>
         </div>
-  <div class="toolbar-actions">
-    <label class="fmt-label">Format:</label>
-    <select id="fmtSelect">
-      <option value="json" selected>JSON</option>
-      <option value="lua">Lua</option>
-    </select>
-    <button id="addBtn">Add</button>
-    <button id="updateBtn">Update</button>
-    <button id="removeBtn" class="danger">Remove</button>
-  </div>
-</div>
 
-<!-- Code editor (textarea + gutter) -->
-
+        <!-- Enhanced Code editor -->
         <div class="codewrap">
           <div class="gutter" id="gutter"></div>
           <textarea id="jsonInput" spellcheck="false" placeholder='{
-  "label": "Water",
-  "weight": 200,
-  "type": "item"
+  "name": "example_item",
+  "label": "Example Item",
+  "weight": 100,
+  "type": "item",
+  "useable": true,
+  "unique": false,
+  "description": "An example item for demonstration"
 }'></textarea>
           <div class="minimap" aria-hidden="true"></div>
         </div>
       </div>
     </div>
 
-    <!-- Status bar -->
+    <!-- Enhanced Status bar -->
     <div class="statusbar">
       <div id="status-left">JSON</div>
       <div id="status-center">Ready</div>
-      <div id="status-right">Ln 1, Col 1   Spaces: 2   UTF-8   LF</div>
+      <div id="status-right">Ln 1, Col 1 • Spaces: 2 • UTF-8 • LF</div>
     </div>
 
+    <!-- Enhanced Toast notifications -->
     <div id="toast" class="toast hidden"></div>
   </div>
 

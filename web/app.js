@@ -1,4 +1,5 @@
 // DM Shared Panel — Web App (NUI)
+// Enhanced VS Code-style interface with Lime accent color
 // Adds dynamic Add-Modal with per-entity field specs (items, vehicles, weapons, jobs)
 
 const state = {
@@ -71,8 +72,15 @@ function showToast(msg, ok=true){
   t.textContent = msg;
   t.classList.remove('hidden', 'ok', 'err');
   t.classList.add(ok ? 'ok' : 'err');
+  
+  // Add entrance animation
+  setTimeout(() => t.classList.add('show'), 10);
+  
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(()=>t.classList.add('hidden'), 2200);
+  showToast._t = setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.classList.add('hidden'), 300);
+  }, 3000);
 }
 
 // ===== Tabs & List =====
@@ -81,6 +89,16 @@ function switchTab(tab){
   document.querySelectorAll('.tab').forEach(b=> b.classList.toggle('active', b.dataset.tab === tab));
   el('#fileEntity').textContent = tab;
   el('#fileExt').textContent = state.format === 'lua' ? '.lua' : '.json';
+  
+  // Add tab switching animation
+  const editorGroup = el('.editor-group');
+  if (editorGroup) {
+    editorGroup.style.opacity = '0.7';
+    setTimeout(() => {
+      editorGroup.style.opacity = '1';
+    }, 150);
+  }
+  
   renderList();
   state.selectedKey = null;
   keyInput().textContent = 'new_key';
@@ -100,6 +118,16 @@ function renderList(){
     const li = document.createElement('li');
     li.textContent = k;
     li.dataset.key = k;
+    
+    // Add entry animation
+    li.style.opacity = '0';
+    li.style.transform = 'translateX(-10px)';
+    setTimeout(() => {
+      li.style.transition = 'all 0.2s ease';
+      li.style.opacity = '1';
+      li.style.transform = 'translateX(0)';
+    }, filtered.indexOf(k) * 20);
+    
     if(state.selectedKey === k) li.classList.add('active');
     li.addEventListener('click', ()=>{
       state.selectedKey = k;
@@ -242,8 +270,16 @@ function openAddModal(){
   addEntityLabel().textContent = entity;
   addKey().value = 'new_key';
   buildAddFields(entity);
+  
+  // Enhanced modal opening animation
+  const modal = addModal();
   addModal().classList.remove('hidden');
-  setTimeout(()=> addKey().focus(), 0);
+  
+  // Focus with slight delay for better UX
+  setTimeout(() => {
+    addKey().focus();
+    addKey().select();
+  }, 100);
 }
 
 function closeAddModal(){
@@ -384,9 +420,11 @@ function updateStatus(){
   const text = ta.value || '';
   let line = 1, col = 1;
   for(let i=0;i<pos;i++){ if(text[i] === '\n'){ line++; col = 1; } else { col++; } }
+  
+  // Enhanced status display
   el('#status-left').textContent = state.format.toUpperCase();
-  el('#status-center').textContent = state.selectedKey ? 'Editing' : 'Ready';
-  el('#status-right').textContent = `Ln ${line}, Col ${col}   Spaces: 2   UTF-8   LF`;
+  el('#status-center').textContent = state.selectedKey ? `Editing: ${state.selectedKey}` : 'Ready';
+  el('#status-right').textContent = `Ln ${line}, Col ${col} • Spaces: 2 • UTF-8 • LF`;
 }
 
 // ===== Events =====
@@ -404,8 +442,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   el('#refreshBtn').addEventListener('click', ()=> sendNui('fetchAll', {}));
   // Close button (NUI)
   el('#closeBtn').addEventListener('click', () => {
-    sendNui('close', {});
-    el('#app').classList.add('hidden');
+    // Add closing animation
+    const app = el('#app');
+    app.style.transition = 'all 0.3s ease';
+    app.style.opacity = '0';
+    app.style.transform = 'scale(0.95)';
+    
+    setTimeout(() => {
+      sendNui('close', {});
+      app.classList.add('hidden');
+      app.style.opacity = '1';
+      app.style.transform = 'scale(1)';
+    }, 300);
   });
 
   // Editor events
@@ -421,6 +469,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('fmtSelect').addEventListener('change', (e)=>{
     state.format = e.target.value;
     el('#fileExt').textContent = state.format === 'lua' ? '.lua' : '.json';
+    
+    // Add format switching animation
+    const editor = jsonTA();
+    editor.style.transition = 'all 0.2s ease';
+    editor.style.opacity = '0.5';
+    
     const obj = state.data[state.tab] || {};
     const k = state.selectedKey;
     if(k && obj[k] !== undefined){
@@ -429,8 +483,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
     } else {
       setText(state.format === 'lua' ? 'new_key = { }' : '{}');
     }
+    
+    setTimeout(() => {
+      editor.style.opacity = '1';
+    }, 200);
+    
     updateStatus();
   });
+
+  // Add opening animation
+  const app = el('#app');
+  if (!app.classList.contains('hidden')) {
+    app.style.opacity = '0';
+    app.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      app.style.transition = 'all 0.3s ease';
+      app.style.opacity = '1';
+      app.style.transform = 'scale(1)';
+    }, 100);
+  }
 
   setText(state.format === 'lua' ? 'new_key = { }' : '{}');
   updateStatus();
